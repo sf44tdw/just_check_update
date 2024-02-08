@@ -59,7 +59,7 @@ function wait_5_min() {
 	sleep 300
 }
 
-readonly LOGDIR="/var/log//update-check-log"
+readonly LOGDIR="/var/log/update-check-log"
 readonly LOGFILE="${LOGDIR}/$(date +%Y%m%d%H%M%S).log"
 mkdir -p "${LOGDIR}" && chmod 755 "${LOGDIR}" || exit 1
 
