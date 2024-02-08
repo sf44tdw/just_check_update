@@ -13,7 +13,7 @@ else
 fi
 
 #使用するコマンド
-readonly PKCON_COMMAND="pkcon"
+readonly PKCON_COMMAND="/usr/bin/pkcon"
 readonly PKCON_COMMAND_LINE="${PKCON_COMMAND} get-updates"
 
 #このスクリプトの名前。
@@ -59,7 +59,7 @@ function wait_5_min() {
 	sleep 300
 }
 
-readonly LOGDIR="${HOME}/update-check-log"
+readonly LOGDIR="/var/log//update-check-log"
 readonly LOGFILE="${LOGDIR}/$(date +%Y%m%d%H%M%S).log"
 mkdir -p "${LOGDIR}" && chmod 755 "${LOGDIR}" || exit 1
 
@@ -90,7 +90,7 @@ fi
 
 echo "$(date +%Y%m%d%H%M%S)_チェック開始。" >>"${LOGFILE}"
 
-$("${PKCON_COMMAND_LINE} >> ${LOGFILE} 2>&1")
+eval "${PKCON_COMMAND_LINE} >> ${LOGFILE} 2>&1"
 
 readonly RET_PKCON="${?}"
 if [ "${RET_PKCON}" -ne 0 ]; then
@@ -100,4 +100,3 @@ fi
 echo "$(date +%Y%m%d%H%M%S)_チェック終了。" >>"${LOGFILE}"
 
 delete_lock_and_exit "正常終了します。" "${LOGFILE}" 0
-
