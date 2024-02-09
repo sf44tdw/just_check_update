@@ -14,7 +14,7 @@ fi
 
 #使用するコマンド
 readonly PKCON_COMMAND="/usr/bin/pkcon"
-readonly PKCON_COMMAND_LINE="${PKCON_COMMAND} get-updates"
+readonly PKCON_COMMAND_LINE="${PKCON_COMMAND} -d get-updates"
 
 #このスクリプトの名前。
 readonly MY_NAME=$(basename "${0}")
