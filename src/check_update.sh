@@ -63,9 +63,9 @@ readonly LOGDIR="/var/log/update-check-log"
 readonly LOGFILE="${LOGDIR}/$(date +%Y%m%d%H%M%S).log"
 mkdir -p "${LOGDIR}" && chmod 755 "${LOGDIR}" || exit 1
 
-echo "$(date +%Y%m%d%H%M%S)_開始します。" >>"${LOGFILE}"
-
 wait_5_min
+
+echo "$(date +%Y%m%d%H%M%S)_開始します。" >>"${LOGFILE}"
 
 #ロックファイル生成。
 echo "$(date +%Y%m%d%H%M%S)_ロックファイル生成。" >>"${LOGFILE}"
