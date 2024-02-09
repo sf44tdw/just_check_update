@@ -24,6 +24,6 @@ crontab -e
 @reboot /usr/local/sbin/check_update.sh
 
 #3時間おきにチェック。
-* */3 * * * /usr/local/sbin/check_update.sh
+00 0-23/3 * * * /usr/local/sbin/check_update.sh
 ```
 4.rootのcronをセーブ
