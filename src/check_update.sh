@@ -13,8 +13,8 @@ else
 fi
 
 #使用するコマンド
-readonly PKCON_COMMAND="dnf"
-readonly PKCON_COMMAND_LINE="${PKCON_COMMAND} update --assumeno"
+readonly UPDATE_COMMAND="dnf"
+readonly UPDATE_COMMAND_LINE="${UPDATE_COMMAND} update --assumeno"
 
 #このスクリプトの名前。
 readonly MY_NAME=$(basename "${0}")
@@ -82,19 +82,19 @@ echo "$(date +%Y%m%d%H%M%S)_旧ログ削除。" >>"${LOGFILE}"
 readonly PARAM_DATE_NUM=5000
 find "${LOGDIR}" -name "*.log" -type f -mtime +"${PARAM_DATE_NUM}" -exec rm -f {} \;
 
-readonly PKCON_LIST=$(pgrep -l "${PKCON_COMMAND}" | grep -v grep | grep -v "${MY_NAME}")
-readonly PKCON_COUNT=$(echo "${PKCON_LIST}" | grep -v '^\s*$' | wc -l)
-if [ "${PKCON_COUNT}" != 0 ]; then
-	delete_lock_and_exit "${PKCON_COMMAND}が起動中です。終了します。" "${LOGFILE}" 2
+readonly UPDATE_PROC_LIST=$(pgrep -l "${UPDATE_COMMAND}" | grep -v grep | grep -v "${MY_NAME}")
+readonly UPDATE_PROC_COUNT=$(echo "${UPDATE_PROC_LIST}" | grep -v '^\s*$' | wc -l)
+if [ "${UPDATE_PROC_COUNT}" != 0 ]; then
+	delete_lock_and_exit "${UPDATE_COMMAND_LINE}が起動中です。終了します。" "${LOGFILE}" 2
 fi
 
 echo "$(date +%Y%m%d%H%M%S)_チェック開始。" >>"${LOGFILE}"
 
-eval "${PKCON_COMMAND_LINE} >> ${LOGFILE} 2>&1"
+eval "${UPDATE_COMMAND_LINE} >> ${LOGFILE} 2>&1"
 
-readonly RET_PKCON="${?}"
-if [ "${RET_PKCON}" -ne 0 ]; then
-	echo "$(date +%Y%m%d%H%M%S)_${PKCON_COMMAND_LINE}の戻り値が${RET_PKCON}です。" >>"${LOGFILE}"
+readonly RET_COMMAND="${?}"
+if [ "${RET_COMMAND}" -ne 0 ]; then
+	echo "$(date +%Y%m%d%H%M%S)_${UPDATE_COMMAND_LINE}の戻り値が${RET_PKCON}です。" >>"${LOGFILE}"
 fi
 
 echo "$(date +%Y%m%d%H%M%S)_チェック終了。" >>"${LOGFILE}"
