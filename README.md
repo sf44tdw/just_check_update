@@ -1,4 +1,4 @@
-# check_update_by_pkcon
+# just_check_update
  アップデートチェックをやるだけのコマンド。
 
 # TODO(rootユーザで実施する。)
