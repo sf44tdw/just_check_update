@@ -94,7 +94,7 @@ eval "${UPDATE_COMMAND_LINE} >> ${LOGFILE} 2>&1"
 
 readonly RET_COMMAND="${?}"
 if [ "${RET_COMMAND}" -ne 0 ]; then
-	echo "$(date +%Y%m%d%H%M%S)_${UPDATE_COMMAND_LINE}の戻り値が${RET_PKCON}です。" >>"${LOGFILE}"
+	echo "$(date +%Y%m%d%H%M%S)_${UPDATE_COMMAND_LINE}の戻り値が${RET_COMMAND}です。" >>"${LOGFILE}"
 fi
 
 echo "$(date +%Y%m%d%H%M%S)_チェック終了。" >>"${LOGFILE}"
