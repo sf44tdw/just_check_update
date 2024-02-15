@@ -90,7 +90,7 @@ fi
 
 echo "$(date +%Y%m%d%H%M%S)_チェック開始。" >>"${LOGFILE}"
 
-eval "${UPDATE_COMMAND_LINE} >> ${LOGFILE} 2>&1"
+eval "${UPDATE_COMMAND_LINE}" >> ${LOGFILE} 2>&1
 
 readonly RET_COMMAND="${?}"
 if [ "${RET_COMMAND}" -ne 0 ]; then
