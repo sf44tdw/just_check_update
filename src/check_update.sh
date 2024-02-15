@@ -13,8 +13,8 @@ else
 fi
 
 #使用するコマンド
-readonly UPDATE_COMMAND="dnf"
-readonly UPDATE_COMMAND_LINE="${UPDATE_COMMAND} update --assumeno"
+readonly UPDATE_COMMAND="pkcon"
+readonly UPDATE_COMMAND_LINE="${UPDATE_COMMAND} refresh && ${UPDATE_COMMAND} get-updates"
 
 #このスクリプトの名前。
 readonly MY_NAME=$(basename "${0}")
