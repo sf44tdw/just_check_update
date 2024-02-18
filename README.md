@@ -19,12 +19,18 @@ ls -l /usr/local/sbin/*
 crontab -e
 ```
 
-3.cronに以下記載する。<br>
+3.cronに以下から必要なものを選んで記載する。<br>
 ```
-#起動直後にチェック。
-@reboot /usr/local/sbin/check_update_dnf.sh && /usr/local/sbin/check_update_pkcon.sh
+#起動直後にチェック。(dnfを使用。)
+@reboot /usr/local/sbin/check_update_dnf.sh
 
-#3時間おきにチェック。
-00 0-23/3 * * * /usr/local/sbin/check_update_dnf.sh && /usr/local/sbin/check_update_pkcon.sh
+#3時間おきにチェック。(dnfを使用。)
+00 0-23/3 * * * /usr/local/sbin/check_update_dnf.sh
+
+#起動直後にチェック。(PackageKitを使用。)
+@reboot /usr/local/sbin/check_update_pkcon.sh
+
+#3時間おきにチェック。(PackageKitを使用。)
+00 0-23/3 * * * /usr/local/sbin/check_update_pkcon.sh
 ```
 4.rootのcronをセーブ
