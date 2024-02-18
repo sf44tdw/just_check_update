@@ -68,7 +68,7 @@ function wait_5_min() {
 }
 
 readonly LOGDIR="/var/log/update-check-log"
-readonly LOGFILE="${LOGDIR}/$(date +%Y%m%d%H%M%S).log"
+readonly LOGFILE="${LOGDIR}/$(date +%Y%m%d%H%M%S)_${CHECK_UPDATE_COMMAND}.log"
 mkdir -p "${LOGDIR}" && chmod 755 "${LOGDIR}" || exit 1
 
 wait_5_min
@@ -98,7 +98,7 @@ fi
 
 echo "$(date +%Y%m%d%H%M%S)_チェック開始。" >>"${LOGFILE}"
 
-eval "${CHECK_UPDATE_COMMAND_LINE}" >> ${LOGFILE} 2>&1
+eval "${CHECK_UPDATE_COMMAND_LINE}" >> "${LOGFILE}" 2>&1
 
 readonly RET_COMMAND="${?}"
 if [ "${RET_COMMAND}" -ne 0 ]; then
