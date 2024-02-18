@@ -9,7 +9,7 @@ cd src
 ls -l `pwd`/check_update* /usr/local/sbin/*
 chmod 700 `pwd`/check_update*
 ls -l `pwd`/check_update* /usr/local/sbin/*
-cp -f `pwd`/check_update* /usr/local/sbin/*
+cp -f `pwd`/check_update* /usr/local/sbin/
 
 ls -l /usr/local/sbin/*
 ```
