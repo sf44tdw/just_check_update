@@ -13,8 +13,16 @@ else
 fi
 
 #使用するコマンド
-readonly UPDATE_COMMAND="pkcon"
-readonly UPDATE_COMMAND_LINE="${UPDATE_COMMAND} refresh && ${UPDATE_COMMAND} get-updates"
+readonly CHECK_UPDATE_COMMAND="${EX_CHECK_UPDATE_COMMAND}"
+if [ 0 -eq ${#CHECK_UPDATE_COMMAND} ]; then
+	echo "チェックコマンド名取得失敗。" 1>&2
+	exit 100
+fi
+readonly CHECK_UPDATE_COMMAND_LINE="${EX_CHECK_UPDATE_COMMAND_LINE}"
+if [ 0 -eq ${#CHECK_UPDATE_COMMAND_LINE} ]; then
+	echo "チェックコマンドライン取得失敗。" 1>&2
+	exit 100
+fi
 
 #このスクリプトの名前。
 readonly MY_NAME=$(basename "${0}")
@@ -37,12 +45,12 @@ function delete_lock_file_and_exit() {
 	is_numeric "${EXIT_CODE}"
 	local -r ret="${?}"
 	if [ "${ret}" -ge 2 ]; then
-		echo "指定された戻り値が数字ではない。戻り値=${EXIT_CODE}"1 >&2
+		echo "指定された戻り値が数字ではない。戻り値=${EXIT_CODE}" 1>&2
 		exit 100
 	fi
 	if [ -h "${_lockfile}" ]; then
 		if ! rm -f "${_lockfile}" >/dev/null 2>&1; then
-			echo "ロックファイル削除失敗。戻り値はrmのものになる。ロックファイル=${_lockfile}"1 >&2
+			echo "ロックファイル削除失敗。戻り値はrmのものになる。ロックファイル=${_lockfile}" 1>&2
 			exit "${?}"
 		fi
 	fi
@@ -82,19 +90,19 @@ echo "$(date +%Y%m%d%H%M%S)_旧ログ削除。" >>"${LOGFILE}"
 readonly PARAM_DATE_NUM=5000
 find "${LOGDIR}" -name "*.log" -type f -mtime +"${PARAM_DATE_NUM}" -exec rm -f {} \;
 
-readonly UPDATE_PROC_LIST=$(pgrep -l "${UPDATE_COMMAND}" | grep -v grep | grep -v "${MY_NAME}")
+readonly UPDATE_PROC_LIST=$(pgrep -l "${CHECK_UPDATE_COMMAND}" | grep -v grep | grep -v "${MY_NAME}")
 readonly UPDATE_PROC_COUNT=$(echo "${UPDATE_PROC_LIST}" | grep -v '^\s*$' | wc -l)
 if [ "${UPDATE_PROC_COUNT}" != 0 ]; then
-	delete_lock_and_exit "${UPDATE_COMMAND_LINE}が起動中です。終了します。" "${LOGFILE}" 2
+	delete_lock_and_exit "${CHECK_UPDATE_COMMAND_LINE}が起動中です。終了します。" "${LOGFILE}" 2
 fi
 
 echo "$(date +%Y%m%d%H%M%S)_チェック開始。" >>"${LOGFILE}"
 
-eval "${UPDATE_COMMAND_LINE}" >> ${LOGFILE} 2>&1
+eval "${CHECK_UPDATE_COMMAND_LINE}" >> ${LOGFILE} 2>&1
 
 readonly RET_COMMAND="${?}"
 if [ "${RET_COMMAND}" -ne 0 ]; then
-	echo "$(date +%Y%m%d%H%M%S)_${UPDATE_COMMAND_LINE}の戻り値が${RET_COMMAND}です。" >>"${LOGFILE}"
+	echo "$(date +%Y%m%d%H%M%S)_${CHECK_UPDATE_COMMAND_LINE}の戻り値が${RET_COMMAND}です。" >>"${LOGFILE}"
 fi
 
 echo "$(date +%Y%m%d%H%M%S)_チェック終了。" >>"${LOGFILE}"
