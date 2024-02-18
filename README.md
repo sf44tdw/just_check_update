@@ -22,9 +22,9 @@ crontab -e
 3.cronに以下記載する。<br>
 ```
 #起動直後にチェック。
-@reboot /usr/local/sbin/check_update_check_update_dnf.sh && /usr/local/sbin/check_update_check_update_pkcon.sh
+@reboot /usr/local/sbin/check_update_dnf.sh && /usr/local/sbin/check_update_pkcon.sh
 
 #3時間おきにチェック。
-00 0-23/3 * * * /usr/local/sbin/check_update_check_update_dnf.sh && /usr/local/sbin/check_update_check_update_pkcon.sh
+00 0-23/3 * * * /usr/local/sbin/check_update_dnf.sh && /usr/local/sbin/check_update_pkcon.sh
 ```
 4.rootのcronをセーブ
