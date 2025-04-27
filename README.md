@@ -31,10 +31,10 @@ Packagekitを使用する場合<br>
 ```
 echo '
 #起動直後にチェック。(PackageKitを使用。)
-@reboot root /usr/local/sbin/check_update_pkcon.sh
+@reboot root /usr/local/sbin/check_update_pkcon
 
 #3時間おきにチェック。(PackageKitを使用。)
-00 0-23/3 * * * root /usr/local/sbin/check_update_pkcon.sh
+00 0-23/3 * * * root /usr/local/sbin/check_update_pkcon
 ' > /etc/cron.d/just_check_update.cron
 ```
 
