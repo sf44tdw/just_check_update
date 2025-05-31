@@ -52,11 +52,11 @@ ls -l `pwd`/just_check_update* /etc/systemd/system/just_check_update*
 dnfを使用する場合<br>
 ```
 systemctl enable just_check_update_dnf.timer
-systemctl status just_check_update.dnf.timer
+systemctl status just_check_update_dnf.timer
 ```
 
 Packagekitを使用する場合。<br>
 ```
 systemctl enable just_check_update_pkcon.timer
-systemctl status just_check_update.pkcon.timer
+systemctl status just_check_update_pkcon.timer
 ```
