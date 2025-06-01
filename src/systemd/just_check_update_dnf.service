@@ -1,0 +1,10 @@
+[Unit]
+Description=Just check update by dnf
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/usr/bin/bash /usr/local/sbin/check_update_dnf.sh
+
+[Install]
+WantedBy=multi-user.target

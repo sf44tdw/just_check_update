@@ -1,0 +1,10 @@
+[Unit]
+Description=Timer for just_check_update_pkcon
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=3h
+Persistent=true
+
+[Install]
+WantedBy=timers.target
