@@ -7,4 +7,4 @@ OnUnitActiveSec=3h
 Persistent=true
 
 [Install]
-WantedBy=just_check_update_pkcon.service
+WantedBy=timers.target
