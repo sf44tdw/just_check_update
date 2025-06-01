@@ -1,5 +1,5 @@
 [Unit]
-Description=Just check update
+Description=Just check update by dnf
 
 [Service]
 Type=oneshot
