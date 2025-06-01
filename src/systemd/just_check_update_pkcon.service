@@ -4,7 +4,7 @@ Description=Just check update
 [Service]
 Type=oneshot
 User=root
-ExecStart=/usr/local/sbin/check_update_pkcon.sh
+ExecStart=/usr/bin/bash /usr/local/sbin/check_update_pkcon.sh
 
 [Install]
 WantedBy=multi-user.target
