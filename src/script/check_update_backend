@@ -18,9 +18,14 @@ if [ 0 -eq ${#CHECK_UPDATE_COMMAND} ]; then
 	echo "チェックコマンド名取得失敗。" 1>&2
 	exit 100
 fi
-readonly CHECK_UPDATE_COMMAND_LINE="${EX_CHECK_UPDATE_COMMAND_LINE}"
-if [ 0 -eq ${#CHECK_UPDATE_COMMAND_LINE} ]; then
-	echo "チェックコマンドライン取得失敗。" 1>&2
+readonly CHECK_UPDATE_COMMAND_REFRESH="${EX_CHECK_UPDATE_COMMAND_REFRESH}"
+if [ 0 -eq ${#CHECK_UPDATE_COMMAND_REFRESH} ]; then
+	echo "リフレッシュコマンドライン取得失敗。" 1>&2
+	exit 100
+fi
+readonly CHECK_UPDATE_COMMAND_UPDATE="${EX_CHECK_UPDATE_COMMAND_UPDATE}"
+if [ 0 -eq ${#CHECK_UPDATE_COMMAND_UPDATE} ]; then
+	echo "アップデートコマンドライン取得失敗。" 1>&2
 	exit 100
 fi
 
@@ -93,16 +98,17 @@ find "${LOGDIR}" -name "*.log" -type f -mtime +"${PARAM_DATE_NUM}" -exec rm -f {
 readonly UPDATE_PROC_LIST=$(pgrep -l "${CHECK_UPDATE_COMMAND}" | grep -v grep | grep -v "${MY_NAME}")
 readonly UPDATE_PROC_COUNT=$(echo "${UPDATE_PROC_LIST}" | grep -v '^\s*$' | wc -l)
 if [ "${UPDATE_PROC_COUNT}" != 0 ]; then
-	delete_lock_and_exit "${CHECK_UPDATE_COMMAND_LINE}が起動中です。終了します。" "${LOGFILE}" 2
+	delete_lock_and_exit "${CHECK_UPDATE_COMMAND}が起動中です。終了します。" "${LOGFILE}" 2
 fi
 
 echo "$(date +%Y%m%d%H%M%S)_チェック開始。" >>"${LOGFILE}"
 
-eval "${CHECK_UPDATE_COMMAND_LINE}" >> "${LOGFILE}" 2>&1
+${CHECK_UPDATE_COMMAND_REFRESH} >> "${LOGFILE}" 2>&1 && \
+${CHECK_UPDATE_COMMAND_UPDATE} >> "${LOGFILE}" 2>&1
 
 readonly RET_COMMAND="${?}"
 if [ "${RET_COMMAND}" -ne 0 ]; then
-	echo "$(date +%Y%m%d%H%M%S)_${CHECK_UPDATE_COMMAND_LINE}の戻り値が${RET_COMMAND}です。" >>"${LOGFILE}"
+	echo "$(date +%Y%m%d%H%M%S)_${CHECK_UPDATE_COMMAND_REFRESH} && ${CHECK_UPDATE_COMMAND_UPDATE}の戻り値が${RET_COMMAND}です。" >>"${LOGFILE}"
 fi
 
 echo "$(date +%Y%m%d%H%M%S)_チェック終了。" >>"${LOGFILE}"
