@@ -1,34 +1,22 @@
 # just_check_update
  packagekitを使って、定期的にアップデートチェックを行う。アップデートがあればダウンロードも行う。
 
-# TODO(rootユーザで実施する。)
+## RPMパッケージの作成
 
-1.パスが通る場所にコピーする。<br>
-```
-cd src/script
-ls -l `pwd`/check_update* /usr/local/sbin/*
-chmod 700 `pwd`/check_update*
-ls -l `pwd`/check_update* /usr/local/sbin/*
-cp -f `pwd`/check_update* /usr/local/sbin/
+RPMビルド環境に `rpm-build` と `systemd-rpm-macros` をインストールし、リポジトリのルートでソースアーカイブを作成してからビルドする。
 
-ls -l /usr/local/sbin/*
-```
-
-2.起動タイミングをsystemdに適宜設定する。<br>
-
-①.ServiceファイルとTimerファイルを配置する。
-```
-cd src/systemd
-ls -l `pwd`/just_check_update* /etc/systemd/system/just_check_update*
-chmod 700 `pwd`/just_check_update*
-ls -l `pwd`/just_check_update* /etc/systemd/system/just_check_update*
-cp -f `pwd`/just_check_update* /etc/systemd/system/
-
-ls -l `pwd`/just_check_update* /etc/systemd/system/just_check_update*
+```sh
+version=0.1.0
+mkdir -p "$HOME/rpmbuild/SOURCES" "$HOME/rpmbuild/SPECS"
+git archive --format=tar.gz --prefix="just_check_update-${version}/" HEAD \
+  > "$HOME/rpmbuild/SOURCES/just_check_update-${version}.tar.gz"
+cp just_check_update.spec "$HOME/rpmbuild/SPECS/"
+rpmbuild -ba "$HOME/rpmbuild/SPECS/just_check_update.spec"
 ```
 
-②.Timerファイルを有効化する。<br>
-```
-systemctl enable just_check_update_pkcon.timer
-systemctl status just_check_update_pkcon.timer
+作成した RPM をインストール後、定期実行を有効にする。
+
+```sh
+sudo dnf install "$HOME"/rpmbuild/RPMS/noarch/just_check_update-*.rpm
+sudo systemctl enable --now just_check_update_pkcon.timer
 ```
