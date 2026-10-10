@@ -8,9 +8,8 @@ RPMビルド環境に `rpm-build` と `systemd-rpm-macros` をインストール
 ```sh
 version=0.1.0
 mkdir -p "$HOME/rpmbuild/SOURCES" "$HOME/rpmbuild/SPECS"
-tar --exclude='./.git' \
-  --transform="s,^\\.,just_check_update-${version}," \
-  -czf "$HOME/rpmbuild/SOURCES/just_check_update-${version}.tar.gz" .
+git archive --format=tar.gz --prefix="just_check_update-${version}/" HEAD \
+  > "$HOME/rpmbuild/SOURCES/just_check_update-${version}.tar.gz"
 cp just_check_update.spec "$HOME/rpmbuild/SPECS/"
 rpmbuild -ba "$HOME/rpmbuild/SPECS/just_check_update.spec"
 ```
