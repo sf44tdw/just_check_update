@@ -16,7 +16,7 @@ ls -l /usr/local/sbin/*
 
 2.起動タイミングをsystemdに適宜設定する。<br>
 
-①.Timerファイルを配置する。
+①.ServiceファイルとTimerファイルを配置する。
 ```
 cd src/systemd
 ls -l `pwd`/just_check_update* /etc/systemd/system/just_check_update*
@@ -27,7 +27,7 @@ cp -f `pwd`/just_check_update* /etc/systemd/system/
 ls -l `pwd`/just_check_update* /etc/systemd/system/just_check_update*
 ```
 
-②Timerファイルを有効化する。<br>
+②.Timerファイルを有効化する。<br>
 ```
 systemctl enable just_check_update_pkcon.timer
 systemctl status just_check_update_pkcon.timer
