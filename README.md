@@ -1,5 +1,5 @@
 # just_check_update
- アップデートチェックをやるだけのコマンド。
+ packagekitを使って、定期的にアップデートチェックを行う。アップデートがあればダウンロードも行う。
 
 # TODO(rootユーザで実施する。)
 
@@ -14,20 +14,9 @@ cp -f `pwd`/check_update* /usr/local/sbin/
 ls -l /usr/local/sbin/*
 ```
 
-2.cronに以下から必要なものを選んで記載するか、systemdに適宜設定する。<br>
+2.起動タイミングをsystemdに適宜設定する。<br>
 
-Packagekitを使用する場合<br>
-```
-echo '
-#起動直後にチェック。(PackageKitを使用。)
-@reboot root /usr/local/sbin/check_update_pkcon.sh
-
-#3時間おきにチェック。(PackageKitを使用。)
-00 0-23/3 * * * root /usr/local/sbin/check_update_pkcon.sh
-' > /etc/cron.d/just_check_update.cron
-```
-
-systemdによる設定。<br>
+①.ServiceファイルとTimerファイルを配置する。
 ```
 cd src/systemd
 ls -l `pwd`/just_check_update* /etc/systemd/system/just_check_update*
@@ -38,7 +27,7 @@ cp -f `pwd`/just_check_update* /etc/systemd/system/
 ls -l `pwd`/just_check_update* /etc/systemd/system/just_check_update*
 ```
 
-Packagekitを使用する場合。<br>
+②.Timerファイルを有効化する。<br>
 ```
 systemctl enable just_check_update_pkcon.timer
 systemctl status just_check_update_pkcon.timer
