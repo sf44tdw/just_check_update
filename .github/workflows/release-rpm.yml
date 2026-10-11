@@ -10,7 +10,13 @@ permissions:
 jobs:
   build-rpm:
     runs-on: ubuntu-latest
-    container: fedora:latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image:
+          - fedora:44
+          - almalinux:10
+    container: ${{ matrix.image }}
 
     steps:
       - name: Install RPM build dependencies
