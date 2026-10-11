@@ -13,13 +13,13 @@ jobs:
     container: fedora:latest
 
     steps:
+      - name: Install RPM build dependencies
+        run: dnf install -y git rpm-build systemd-rpm-macros
+
       - name: Check out release tag
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.release.tag_name }}
-
-      - name: Install RPM build dependencies
-        run: dnf install -y git rpm-build systemd-rpm-macros
 
       - name: Build RPM
         env:
@@ -35,6 +35,7 @@ jobs:
 
           topdir="$HOME/rpmbuild"
           mkdir -p "$topdir"/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git archive --format=tar.gz --prefix="just_check_update-${version}/" HEAD \
             > "$topdir/SOURCES/just_check_update-${version}.tar.gz"
 
