@@ -1,0 +1,51 @@
+name: Build RPM
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build-rpm:
+    runs-on: ubuntu-latest
+    container: fedora:latest
+
+    steps:
+      - name: Check out release tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: Install RPM build dependencies
+        run: dnf install -y git rpm-build systemd-rpm-macros
+
+      - name: Build RPM
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -eu
+
+          version="${RELEASE_TAG#v}"
+          if ! printf '%s\n' "$version" | grep -Eq '^[0-9]+(\.[0-9]+){1,2}([.-][0-9A-Za-z.-]+)?$'; then
+            echo "Release tag must be a version such as v0.1.0: $RELEASE_TAG" >&2
+            exit 1
+          fi
+
+          topdir="$HOME/rpmbuild"
+          mkdir -p "$topdir"/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
+          git archive --format=tar.gz --prefix="just_check_update-${version}/" HEAD \
+            > "$topdir/SOURCES/just_check_update-${version}.tar.gz"
+
+          sed "s/^Version:        .*/Version:        ${version}/" \
+            just_check_update.spec > "$topdir/SPECS/just_check_update.spec"
+          rpmbuild -ba "$topdir/SPECS/just_check_update.spec"
+
+          mkdir -p dist
+          find "$topdir/RPMS" -type f -name '*.rpm' -exec cp {} dist/ \;
+
+      - name: Upload RPM to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.rpm
