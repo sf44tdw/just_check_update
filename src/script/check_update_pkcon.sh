@@ -2,7 +2,7 @@
 
 #使用するコマンド
 export EX_CHECK_UPDATE_COMMAND="pkcon"
-export EX_CHECK_UPDATE_COMMAND_REFRESH="${EX_CHECK_UPDATE_COMMAND} refresh force"
+export EX_CHECK_UPDATE_COMMAND_REFRESH="true"
 export EX_CHECK_UPDATE_COMMAND_UPDATE="${EX_CHECK_UPDATE_COMMAND} -d update"
 
 readonly SCRIPT_DIR=$(cd "$(dirname "${0}")" && pwd)
