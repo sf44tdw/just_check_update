@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         image:
-          - fedora:44
+          - fedora:45
           - almalinux:10
           - almalinux:8
     container: ${{ matrix.image }}
