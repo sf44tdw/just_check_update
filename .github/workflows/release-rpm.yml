@@ -16,6 +16,7 @@ jobs:
         image:
           - fedora:44
           - almalinux:10
+          - almalinux:8
     container: ${{ matrix.image }}
 
     steps:
