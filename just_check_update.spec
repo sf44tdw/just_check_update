@@ -1,6 +1,6 @@
 Name:           just_check_update
 Version:        0.1.0
-Release:        1%{?dist}
+Release:        1
 Summary:        Periodically check for PackageKit updates
 License:        GPL-3.0-only
 URL:            https://github.com/sf44tdw/just_check_update
