@@ -2,8 +2,8 @@
 
 #使用するコマンド
 export EX_CHECK_UPDATE_COMMAND="pkcon"
-export EX_CHECK_UPDATE_COMMAND_REFRESH="${EX_CHECK_UPDATE_COMMAND} refresh"
-export EX_CHECK_UPDATE_COMMAND_UPDATE="${EX_CHECK_UPDATE_COMMAND} -d update -y --noninteractive"
+export EX_CHECK_UPDATE_COMMAND_REFRESH="${EX_CHECK_UPDATE_COMMAND} refresh force -v"
+export EX_CHECK_UPDATE_COMMAND_UPDATE="${EX_CHECK_UPDATE_COMMAND} -d update -y --noninteractive -v"
 
 readonly SCRIPT_DIR=$(cd "$(dirname "${0}")" && pwd)
 readonly BACKEND_PATH="${SCRIPT_DIR}/check_update_backend"
