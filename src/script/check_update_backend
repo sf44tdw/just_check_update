@@ -35,9 +35,14 @@ readonly MY_NAME=$(basename "${0}")
 #ロックファイルのパス
 readonly _lockfile="/tmp/${MY_NAME}.lock"
 
+function write_log() {
+	local -r MESSAGE="${1}"
+	local -r LOG_FILE="${2}"
+	printf '%s_%s\n' "$(date '+%Y-%m-%dT%H:%M:%S%:z')" "${MESSAGE}" >>"${LOG_FILE}"
+}
+
 function log_and_exit() {
-	local -r YMD_VAL=$(date +%Y%m%d%H%M%S)
-	echo "${YMD_VAL}_${1}_${3}" >>"${2}"
+	write_log "${1}_${3}" "${2}"
 	exit "${3}"
 }
 
@@ -51,18 +56,18 @@ mkdir -p "${LOGDIR}" && chmod 755 "${LOGDIR}" || exit 1
 
 wait_5_min
 
-echo "$(date +%Y%m%d%H%M%S)_開始します。" >>"${LOGFILE}"
+write_log "開始します。" "${LOGFILE}"
 
 #ロックファイル生成。
-echo "$(date +%Y%m%d%H%M%S)_ロックファイル生成。" >>"${LOGFILE}"
+write_log "ロックファイル生成。" "${LOGFILE}"
 exec 9>"${_lockfile}"
 if ! flock -n 9; then
-	echo "$(date +%Y%m%d%H%M%S)_Cannot run multiple instance." >>"${LOGFILE}"
+	write_log "Cannot run multiple instance." "${LOGFILE}"
 	exit 110
 fi
 
 # ファイル更新日時が5000日を越えたログファイルを削除
-echo "$(date +%Y%m%d%H%M%S)_旧ログ削除。" >>"${LOGFILE}"
+write_log "旧ログ削除。" "${LOGFILE}"
 readonly PARAM_DATE_NUM=5000
 find "${LOGDIR}" -name "*.log" -type f -mtime +"${PARAM_DATE_NUM}" -exec rm -f {} \;
 
@@ -72,16 +77,16 @@ if [ "${UPDATE_PROC_COUNT}" != 0 ]; then
 	log_and_exit "${CHECK_UPDATE_COMMAND}が起動中です。終了します。" "${LOGFILE}" 2
 fi
 
-echo "$(date +%Y%m%d%H%M%S)_チェック開始。" >>"${LOGFILE}"
+write_log "チェック開始。" "${LOGFILE}"
 
 ${CHECK_UPDATE_COMMAND_REFRESH} >> "${LOGFILE}" 2>&1 && \
 ${CHECK_UPDATE_COMMAND_UPDATE} >> "${LOGFILE}" 2>&1
 
 readonly RET_COMMAND="${?}"
 if [ "${RET_COMMAND}" -ne 0 ]; then
-	echo "$(date +%Y%m%d%H%M%S)_${CHECK_UPDATE_COMMAND_REFRESH} && ${CHECK_UPDATE_COMMAND_UPDATE}の戻り値が${RET_COMMAND}です。" >>"${LOGFILE}"
+	write_log "${CHECK_UPDATE_COMMAND_REFRESH} && ${CHECK_UPDATE_COMMAND_UPDATE}の戻り値が${RET_COMMAND}です。" "${LOGFILE}"
 fi
 
-echo "$(date +%Y%m%d%H%M%S)_チェック終了。" >>"${LOGFILE}"
+write_log "チェック終了。" "${LOGFILE}"
 
 log_and_exit "正常終了します。" "${LOGFILE}" 0
