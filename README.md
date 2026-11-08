@@ -21,4 +21,8 @@ sudo dnf install "$HOME"/rpmbuild/RPMS/noarch/just_check_update-*.rpm
 sudo systemctl enable --now just_check_update_pkcon.timer
 ```
 
+## プルリクエストのチェック
+
+`main` ブランチを対象とするプルリクエストでは、GitHub Actionsがシェルスクリプトの構文チェックを実行する。マージを必須チェックでブロックするには、リポジトリのブランチ保護ルールで `Validate shell scripts / shell-syntax` を必須ステータスチェックに設定する。
+
 GitHub Releaseを公開すると、`v` を付けたバージョンタグ（例: `v0.1.0`）からGitHub ActionsがRPMを自動ビルドし、そのReleaseに添付する。
